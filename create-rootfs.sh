@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 默认镜像
-default_mirror="https://mirrors.aliyun.com"
+default_mirror="http://mirror.23m.com"
 
 rootfs=/mnt/rootfs
 root_password="arch1234"
@@ -32,7 +32,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 set -e
-# set -x
+set -x
 
 # 初始化 Pacman
 echo "Server = $default_mirror/archlinux/\$repo/os/\$arch" >| /etc/pacman.d/mirrorlist
@@ -41,7 +41,7 @@ pacman-key --init && pacman-key --populate && pacman -Sy --noconfirm archlinux-k
 # 安装环境需要的基础软件
 pacman -S --noconfirm base-devel arch-install-scripts wget curl zip unzip vim sed pacman-contrib
 # 选取最快的 6 个软件镜像
-curl -s "https://archlinux.org/mirrorlist/?country=CN&protocol=https&use_mirror_status=on)" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - | sudo tee /etc/pacman.d/mirrorlist
+curl -s "https://archlinux.org/mirrorlist/?country=DE&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 6 - | sudo tee /etc/pacman.d/mirrorlist
 pacman -Syy --noconfirm
 
 # 创建 rootfs
@@ -61,11 +61,6 @@ rm $rootfs/etc/machine-id && touch $rootfs/etc/machine-id
 
 arch-chroot $rootfs bash -c 'pacman-key --init && pacman-key --populate && pacman -Sy --noconfirm archlinux-keyring'
 
-# archlinuxcn 软件源
-echo -e "[archlinuxcn]\nServer = $default_mirror/archlinuxcn/\$arch\n" >> $rootfs/etc/pacman.conf
-arch-chroot $rootfs bash -c 'pacman-key --lsign-key "farseerfc@archlinux.org" &&
-    pacman -Syy archlinuxcn-keyring --noconfirm'
-
 # 滚动更新到最新
 arch-chroot $rootfs pacman -Syyu --noconfirm
 
@@ -75,7 +70,7 @@ echo "%wheel ALL=(ALL) ALL" > $rootfs/etc/sudoers.d/wheel
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> $rootfs/etc/sudoers.d/wheel
 
 # 安装 yay 和 bash-completion 等基本软件
-arch-chroot $rootfs pacman -S --noconfirm yay bash-completion net-tools openssh
+arch-chroot $rootfs pacman -S --noconfirm bash-completion net-tools openssh
 echo '[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion' >> $rootfs/etc/profile
 
 
@@ -98,7 +93,7 @@ if $with_wslg ; then
     arch-chroot $rootfs pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
 
     # 安装 Fcitx5
-    arch-chroot $rootfs pacman -S --noconfirm fcitx5-im fcitx5-chinese-addons fcitx5-qt fcitx5-gtk
+    arch-chroot $rootfs pacman -S --noconfirm fcitx5-im fcitx5-qt fcitx5-gtk
     echo "
 export GTK_IM_MODULE_DEFAULT=fcitx
 export QT_IM_MODULE_DEFAULT=fcitx
@@ -123,4 +118,3 @@ sha256sum "$output" > "$output".sha256sum
 du -h "$output"
 chmod 0777 "$output"
 chmod 0777 "$output".sha256sum
-
