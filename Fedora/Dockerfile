@@ -23,7 +23,7 @@ RUN dnf update -y && dnf install \
     vim \
     -y
 
-RUN yes | pip install neovim-remote pylsp-mypy autopep8 isort --break-system-packages
+RUN yes | pip install neovim-remote pylsp-mypy autopep8 isort ddgr --break-system-packages
 RUN wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip 
 RUN mkdir /usr/share/fonts 
 RUN yes | unzip JetBrainsMono.zip -d /usr/share/fonts/ 
@@ -35,6 +35,7 @@ RUN mv typos-lsp /usr/bin/typos-lsp
 RUN curl -s https://ohmyposh.dev/install.sh | bash -s && cp /root/.local/bin/oh-my-posh /usr/local/bin/oh-my-posh
 RUN chmod u+s /usr/local/bin/oh-my-posh
 RUN dnf install https://github.com/PowerShell/PowerShell/releases/download/v7.4.6/powershell-7.4.6-1.rh.x86_64.rpm -y
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN useradd -m filip 
 RUN sudo chsh -s /usr/bin/pwsh filip
