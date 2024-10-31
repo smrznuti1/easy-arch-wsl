@@ -18,7 +18,7 @@ RUN dnf update -y && dnf install \
     neovim \
     git \
     python-pip \
-    python-lsp-server \
+    # python-lsp-server \
     openssh \
     # xorg \
     openssl \
@@ -39,7 +39,7 @@ RUN sudo chsh -s /usr/bin/pwsh filip
 RUN git clone https://github.com/smrznuti1/nvc /home/filip/.config/nvim
 RUN sudo chown -R filip:filip /home/filip/.config
 
-RUN yes | pip install neovim-remote pylsp-mypy autopep8 isort ddgr --break-system-packages
+RUN yes | pip install python-lsp-server neovim-remote pylsp-mypy autopep8 isort ddgr --break-system-packages
 RUN wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip 
 RUN mkdir -p /usr/share/fonts 
 RUN yes | sudo unzip JetBrainsMono.zip -d /usr/share/fonts/ 
