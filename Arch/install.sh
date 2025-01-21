@@ -15,7 +15,7 @@ wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsM
 mkdir /usr/share/fonts 
 yes | unzip JetBrainsMono.zip -d /usr/share/fonts/ 
 rm JetBrainsMono.zip
-pacman -S nodejs npm ripgrep lazygit bottom --noconfirm
+pacman -S nodejs npm ripgrep lazygit bottom fd fzf --noconfirm
 curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz 
 chmod +x gdu_linux_amd64 
 mv gdu_linux_amd64 /usr/bin/gdu
